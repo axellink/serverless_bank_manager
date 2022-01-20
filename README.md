@@ -22,3 +22,6 @@ I will use :
 * Terraform to automate resource creation
 
 That may change since I don't know yet what I'm facing. For example, I don't know yet where my logs will go, but I need them !
+
+# Database Schema
+![Database schema here](./schema/db.drawio.svg)
