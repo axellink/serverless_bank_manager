@@ -5,7 +5,7 @@ window.addEventListener("load", function(){
         if (val.indexOf("JWT=") === 0) jwt = val.substring(4);
     })
     let xhr = new XMLHttpRequest();
-    xhr.open("GET",config.APIUrl + "/auth")
+    xhr.open("GET",config.APIUrl + "/hello")
     xhr.setRequestHeader("Authorization",jwt)
     xhr.send();
     xhr.onload = function(){
