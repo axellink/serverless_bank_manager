@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./dep/amazon-cognito-identity.min.js"></script>
+    <script src="./JS/config.js"></script>
+    <script src="./JS/login.js"></script>
+  </head>
+  <body>
+    <form method="post" action="javascript:void(0);" onsubmit="login()">
+      <label>Username : </label><input type="text" placeholder="username" name="username" required id="username-text">
+      <label>Password : </label><input type="password" name="password" required id="pass-text">
+      <button>login</button>
+    </form>
+  </body>
+</html>

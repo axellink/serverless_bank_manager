@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# ignore config to avoid putting mild secrets while developping online
+/front_app/JS/config.json
+front_app/JS/config.js
