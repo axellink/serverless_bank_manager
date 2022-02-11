@@ -32,6 +32,5 @@ Configure authorization by creating a new authorizer. Its type is JWT, name it w
 Create a new integrations with the type lambda function and select your created lambda.
 
 # What's next ?
-Have the `/hello` respond with user mail (which implies a forth and back with cognito since it's not stocked in the JWT)
 
 Implement user creation, lost password, user deletion password changing
