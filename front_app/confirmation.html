@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./dep/amazon-cognito-identity.min.js"></script>
+    <script src="./JS/config.js"></script>
+    <script src="./JS/signup.js"></script>
+  </head>
+  <body>
+    <form method="post" action="javascript:void(0);" onsubmit="validate_code()">
+      <label>Verification code : </label><input type="number" placeholder="123456" name="code" required id="code-text">
+      <button>verify</button>
+    </form>
+    <span id="confirm-verify"></span>
+  </body>
+</html>

@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="style.css">
     <script src="./dep/amazon-cognito-identity.min.js"></script>
     <script src="./JS/config.js"></script>
-    <script src="./JS/login.js"></script>
+    <script src="./JS/signup.js"></script>
   </head>
   <body>
-    <form method="post" action="javascript:void(0);" onsubmit="login()">
+    <form method="post" action="javascript:void(0);" onsubmit="signup()">
+      <label>Email : </label><input type="email" placeholder="foo@bar.com" name="email" required id="email-text">
       <label>Username : </label><input type="text" placeholder="username" name="username" required id="username-text">
       <label>Password : </label><input type="password" name="password" required id="pass-text">
-      <button>login</button>
+      <button>signup</button>
     </form>
-    <a href="signup.html">signup</a>
   </body>
 </html>
