@@ -19,7 +19,7 @@ def lambda_handler(event, context):
         }
     else:
         # Else look for his email
-        for x in user.get("UserAttributes", {}):
+        for x in user.get("UserAttributes", []):
             if x.get("Name") == "email" :
                 return {
                     'statusCode': 200,
