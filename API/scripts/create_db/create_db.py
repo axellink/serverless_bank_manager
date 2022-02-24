@@ -1,7 +1,7 @@
 import json
-import psycopg2
 import boto3
 import os
+from db_helper.db import sql_execute, sql_execute_many
 
 # This will only work in python3.8, psycopg2 for aws (aws-psycopg2) is not compatible yet with python3.9
 # Remember to create the Lambda layer as well or import won't work
@@ -41,7 +41,8 @@ CREATE TABLE transaction_tags (
 );
 """
 
-tags = ["food", "home", "bill", "entertain", "other", "subscription"]
+tags = [("food"), ("home"), ("bill"), ("entertain"), ("other"), ("subscription")]
+
 
 def get_secret():
 
@@ -64,27 +65,30 @@ def get_secret():
     else:
         return json.loads(get_secret_value_response['SecretString'])
 
+
+@sql_execute(query = creation_sql, param="")
+def create_tables(curs):
+    pass
+
+
+@sql_execute_many(query = "INSERT INTO tags(name) VALUES ('%s');", params = tags)
+def populate_tags(curs):
+    pass
+
+
+@sql_execute(query = "SELECT name FROM tags;")
+def select_tags(curs):
+    ret = []
+    for i in curs:
+        print(i)
+        ret.append(i)
+    return ret
+
+
 def lambda_handler(event, context):
-    try :
-        db_info = get_secret()
-        conn = psycopg2.connect(
-            host = db_info["hostname"],
-            database = db_info["dbname"],
-            user = db_info["username"],
-            password = db_info["password"],
-            port = db_info["port"]
-        )
-
-        cur = conn.cursor()
-        cur.execute(creation_sql)
-        conn.commit()
-
-        for i in tags:
-            cur.execute("INSERT INTO tags(name) VALUES ('" + i + "');")
-        conn.commit()
-
-        cur.close()
-        conn.close()
-        return "OK"
+    try:
+        create_tables()
+        populate_tags()
+        return select_tags()
     except Exception as e:
         return str(e)
