@@ -14,9 +14,16 @@ variable "region" {
     type = string
 }
 
-# Zip our lambdas
-data "archive_file" "create_db_zip" {
-    type        = "zip"
-    source_dir  = format("%s/API/", var.local_dir)
-    output_path = format("%s/DEP/api.zip", var.local_dir)
+variable "subnets" {
+    type     = list(string)
+    nullable = false
+
+    description = "The list of subnets ids to attach the lambdas to"
+}
+
+variable "security_groups" {
+    type     = list(string)
+    nullable = false
+
+    description = "The list of subnets ids to attach the lambdas to"
 }

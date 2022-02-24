@@ -1,6 +1,7 @@
 import json
 import psycopg2
 import boto3
+import os
 
 # This will only work in python3.8, psycopg2 for aws (aws-psycopg2) is not compatible yet with python3.9
 # Remember to create the Lambda layer as well or import won't work
@@ -58,7 +59,7 @@ def get_secret():
         get_secret_value_response = client.get_secret_value(
             SecretId=secret_name
         )
-    except ClientError as e:
+    except Exception as e:
             raise e
     else:
         return json.loads(get_secret_value_response['SecretString'])

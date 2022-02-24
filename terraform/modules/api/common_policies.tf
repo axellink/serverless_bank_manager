@@ -12,7 +12,7 @@ resource "aws_iam_policy" "access_db_secret_policy" {
                     "secretsmanager:GetSecretValue",
                     "secretsmanager:DescribeSecret"
                 ],
-                Resource = format("arn:aws:secretsmanager:%s:%s:secret:%s", var.region, var.account_id, regex("[A-Za-z0-9-]+$",var.secret_arn))
+                Resource = format("arn:aws:secretsmanager:%s:%s:secret:%s", var.region, var.account_id, regex("[A-Za-z0-9-_]+$",var.secret_arn))
             }
         ]
     })
