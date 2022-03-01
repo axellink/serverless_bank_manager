@@ -1,10 +1,5 @@
-import json
-import psycopg2
-import boto3
-import os
+from db_helper.db import DbConn
 
-# This will only work in python3.8, psycopg2 for aws (aws-psycopg2) is not compatible yet with python3.9
-# Remember to create the Lambda layer as well or import won't work
 
 creation_sql="""
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -41,50 +36,25 @@ CREATE TABLE transaction_tags (
 );
 """
 
-tags = ["food", "home", "bill", "entertain", "other", "subscription"]
 
-def get_secret():
+tags = [("food",), ("home",), ("bill",), ("entertain",), ("other",), ("subscription",)]
 
-    secret_name = os.environ["SECRETS_ARN"]
-    region_name = os.environ["SECRETS_REGION"]
 
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
+def select_tags(curs):
+    ret = []
+    for i in curs:
+        ret.append(i[0])
+    print("CREATE_DB : tags added")
+    return ret
 
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except Exception as e:
-            raise e
-    else:
-        return json.loads(get_secret_value_response['SecretString'])
 
 def lambda_handler(event, context):
-    try :
-        db_info = get_secret()
-        conn = psycopg2.connect(
-            host = db_info["hostname"],
-            database = db_info["dbname"],
-            user = db_info["username"],
-            password = db_info["password"],
-            port = db_info["port"]
-        )
-
-        cur = conn.cursor()
-        cur.execute(creation_sql)
-        conn.commit()
-
-        for i in tags:
-            cur.execute("INSERT INTO tags(name) VALUES ('" + i + "');")
-        conn.commit()
-
-        cur.close()
-        conn.close()
-        return "OK"
+    try:
+        DbConn.connect()
+        DbConn.execute(creation_sql)
+        DbConn.execute_many("INSERT INTO tags(name) VALUES (%s);", tags)
+        ret = DbConn.execute("SELECT name FROM tags;", callback=select_tags)
+        DbConn.close()
+        return ret
     except Exception as e:
         return str(e)

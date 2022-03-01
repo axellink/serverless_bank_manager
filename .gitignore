@@ -135,4 +135,6 @@ front_app/JS/config.js
 .terraform*
 *.out
 *.tfstate*
+
 terraform/terraform.tfvars
+.vscode/
