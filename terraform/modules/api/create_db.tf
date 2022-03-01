@@ -80,7 +80,7 @@ resource "aws_lambda_function" "lambda_create_db" {
     role          = aws_iam_role.lambda_create_db_role.arn
     runtime       = "python3.8"
     handler       = "create_db.lambda_handler"
-    layers        = [aws_lambda_layer_version.psycopg2.arn]
+    layers        = [aws_lambda_layer_version.psycopg2.arn, aws_lambda_layer_version.bank_manager_helper.arn]
 
 
     environment {

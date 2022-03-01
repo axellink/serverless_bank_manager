@@ -1,10 +1,4 @@
-import json
-import boto3
-import os
-from db_helper.db import sql_execute, sql_execute_many
-
-# This will only work in python3.8, psycopg2 for aws (aws-psycopg2) is not compatible yet with python3.9
-# Remember to create the Lambda layer as well or import won't work
+from db_helper.db import DbConn
 
 creation_sql="""
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -41,54 +35,25 @@ CREATE TABLE transaction_tags (
 );
 """
 
-tags = [("food"), ("home"), ("bill"), ("entertain"), ("other"), ("subscription")]
+
+tags = [("food",), ("home",), ("bill",), ("entertain",), ("other",), ("subscription",)]
 
 
-def get_secret():
-
-    secret_name = os.environ["SECRETS_ARN"]
-    region_name = os.environ["SECRETS_REGION"]
-
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except Exception as e:
-            raise e
-    else:
-        return json.loads(get_secret_value_response['SecretString'])
-
-
-@sql_execute(query = creation_sql, param="")
-def create_tables(curs):
-    pass
-
-
-@sql_execute_many(query = "INSERT INTO tags(name) VALUES ('%s');", params = tags)
-def populate_tags(curs):
-    pass
-
-
-@sql_execute(query = "SELECT name FROM tags;")
 def select_tags(curs):
     ret = []
     for i in curs:
-        print(i)
-        ret.append(i)
+        ret.append(i[0])
+    print("CREATE_DB : tags added")
     return ret
 
 
 def lambda_handler(event, context):
     try:
-        create_tables()
-        populate_tags()
-        return select_tags()
+        DbConn.connect()
+        DbConn.execute(creation_sql)
+        DbConn.execute_many("INSERT INTO tags(name) VALUES (%s);", tags)
+        ret = DbConn.execute("SELECT name FROM tags;", callback=select_tags)
+        DbConn.close()
+        return ret
     except Exception as e:
         return str(e)
