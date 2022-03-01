@@ -32,3 +32,10 @@ variable "subnets" {
 
     description = "The map of subnets cidr, indexed by AZ"
 }
+
+variable "app_domain_name" {
+  type     = string
+  nullable = false
+
+  description = "The application domain name"
+}

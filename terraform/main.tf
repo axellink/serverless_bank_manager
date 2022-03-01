@@ -9,14 +9,20 @@ provider "aws" {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
+module "cognito" {
+  source = "./modules/cognito"
+
+  app_domain_name = var.app_domain_name
+}
+
 module "vpc" {
   source     = "./modules/vpc"
   cidr_block = var.cidr_block
   subnets    = var.subnets
   region     = var.region
 }
-
-data "aws_caller_identity" "current" {}
 
 module "database" {
   source  = "./modules/postgres"
@@ -38,4 +44,12 @@ module "api" {
 
 output "create_db_output" {
   value = module.api.create_db_out
+}
+
+output "cognito_pool_id" {
+  value = module.cognito.cognito_pool_id
+}
+
+output "cognito_client_id" {
+  value = module.cognito.cognito_client_id
 }
