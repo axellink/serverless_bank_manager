@@ -1,5 +1,6 @@
 from db_helper.db import DbConn
 
+
 creation_sql="""
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

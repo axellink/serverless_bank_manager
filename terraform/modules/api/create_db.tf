@@ -82,7 +82,6 @@ resource "aws_lambda_function" "lambda_create_db" {
     handler       = "create_db.lambda_handler"
     layers        = [aws_lambda_layer_version.psycopg2.arn, aws_lambda_layer_version.bank_manager_helper.arn]
 
-
     environment {
       variables = {
           SECRETS_ARN = var.secret_arn
