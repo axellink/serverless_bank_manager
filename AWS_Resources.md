@@ -34,3 +34,12 @@ Create a new integrations with the type lambda function and select your created 
 # What's next ?
 
 Implement user creation, lost password, user deletion password changing
+
+# 11/03/2022
+
+I terraformed the upload of `hello` lambda, which is now connected to VPC because I used for loop for it.
+It caused it to malfunction because it could not access cognito-idp anymore. The problem is the same as when I tried to connect to RDS, lambda does not have acces to the service.
+So i searched for an endpoint for Cognito, it does not exist yet. So I had to give internet access to my lambda following this [instructions](https://aws.amazon.com/premiumsupport/knowledge-center/internet-access-lambda-function/)
+Long story short, I needed to have private subnets, into which lambda is connected, public subnet with internet gateway, security group and route to access internet, and then connect this all via two NAT gateways with EIP and route on private subnets to route all traffic to the NAT gateways.
+
+However, I may not need connection to cognito in my software, since all it requires is user UUID which is already accessible in the JWT token.
