@@ -115,6 +115,6 @@ resource "aws_lambda_function" "lambda_create_db" {
 
 # Invoke lambda to create database
 resource "aws_lambda_invocation" "action_create_db" {
-    function_name = "create_db"
+    function_name = aws_lambda_function.lambda_create_db["create_db"].function_name
     input         = "{}"
 }
