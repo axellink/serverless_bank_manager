@@ -30,11 +30,13 @@ module "database" {
 }
 
 module "api" {
-  source     = "./modules/api"
-  local_dir  = "${path.root}/.."
-  account_id = data.aws_caller_identity.current.account_id
-  secret_arn = module.database.secret_arn
-  region     = var.region
+  source            = "./modules/api"
+  local_dir         = "${path.root}/.."
+  account_id        = data.aws_caller_identity.current.account_id
+  secret_arn        = module.database.secret_arn
+  region            = var.region
+  cognito_pool_id   = module.cognito.cognito_pool_id
+  cognito_client_id = module.cognito.cognito_client_id
   
   subnets         = module.vpc.subnets_ids
   security_groups = [module.vpc.security_group_id]

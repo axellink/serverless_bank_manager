@@ -14,6 +14,20 @@ variable "region" {
     type = string
 }
 
+variable "cognito_pool_id" {
+    type     = string
+    nullable = false
+
+    description = "ID of the User Pool for the authorizer"
+}
+
+variable "cognito_client_id" {
+    type     = string
+    nullable = false
+
+    description = "ID of the User Pool CLIENT for the authorizer"
+}
+
 variable "subnets" {
     type     = list(string)
     nullable = false
