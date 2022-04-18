@@ -55,3 +55,7 @@ output "cognito_pool_id" {
 output "cognito_client_id" {
   value = module.cognito.cognito_client_id
 }
+
+output "api_uri" {
+  value = module.api.test_api_uri
+}
